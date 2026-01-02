@@ -29,6 +29,16 @@ This makes the DAC **self-correcting**, insensitive to leakage, and largely inde
 
 ## Architecture
 
+### The Example Circuit
+
+Refer to [examples/servodac_test](examples/servodac_test/servodac_test.ino). Here, the test code is responsible for the test input pin, the LCD, and implementing the ServoDAC refresh cycle. 
+
+The ServoDAC library handles the charge, discharge, and feedback pins.
+
+Pin assignments can be changed.
+
+![schematic](schematic.png)
+
 ### Core Elements
 
 - **Microcontroller** (Arduino Nano V3)
@@ -61,13 +71,7 @@ The system behaves like a servo, not a PWM filter.
 
 ---
 
-## The Example Circuit
 
-Refer to [examples/servodac_test](examples/servodac_test/servodac_test.ino). Here, the test code is responsible for the test input pin, the LCD, and implementing the ServoDAC refresh cycle. 
-
-The ServoDAC library handles the charge, discharge, and feedback pins.
-
-![schematic](schematic.png)
 
 ### Components
 
