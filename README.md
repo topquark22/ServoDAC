@@ -75,8 +75,8 @@ The system behaves like a servo, not a PWM filter.
 
 ### Components
 
-- **M1**: Arduino Nano V3  
-- **I1**: Any dual rail-to-rail op-amp. Recommended LMC6482 (ultra-low input bias)  
+- **M1**: Arduino 
+- **I1**: Any dual rail-to-rail op-amp. Recommended LMC6482 (ultra-low input bias); see notes.
 - **Q1**: 2N7000 N-MOSFET  
 - **R1**: 1 kΩ (charge resistor)  
 - **R_D**: 1 kΩ (discharge resistor, on MOSFET drain)  
