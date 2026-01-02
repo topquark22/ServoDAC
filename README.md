@@ -60,7 +60,11 @@ The system behaves like a servo, not a PWM filter.
 
 ---
 
-## The Circuit
+## The Example Circuit
+
+Refer to [examples/servodac_test/servodac_test.ino](examples/servodac_test). Here, the test code is responsible for the test input pin, and the LCD. 
+
+The ServoDAC library handles the charge, discharge, and feedback pins.
 
 ![schematic](schematic.png)
 
