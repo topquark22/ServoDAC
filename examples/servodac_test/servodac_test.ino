@@ -2,16 +2,15 @@
 #include "servodac.h"
 
 // --- wiring pins (matching the original sketch defaults) ---
-const uint8_t PIN_OUT        = 5;   // charge pin (pulse high, then hi-Z)
-const uint8_t PIN_RESET      = 4;   // discharge pin (active-high)
-const uint8_t PIN_CIRCUIT_IN = A2;  // feedback pin (ADC)
+const uint8_t PIN_CHARGE     = 5;   // charge pin (pulse high, then hi-Z)
+const uint8_t PIN_DISCHARGE  = 4;   // discharge pin (active-high)
+const uint8_t PIN_FEEDBACK   = A2;  // feedback pin
+
 const uint8_t PIN_TEST_IN    = A3;  // target pin (ADC)
 
 // --- loop timing / UI ---
 const unsigned long UPDATE_INTERVAL_MS = 10; // control loop period
-const unsigned int  LCD_RATE = 10;           // update LCD every N frames
-
-const int BAUD_RATE = 9600;
+const unsigned int  LCD_RATE = 25;          // update LCD every N frames
 
 // LCD I2C address and size
 const uint8_t LCD_I2C_ADDR = 0x27;
@@ -20,7 +19,7 @@ const uint8_t LCD_HEIGHT = 2;
 LiquidCrystal_I2C lcd(LCD_I2C_ADDR, LCD_WIDTH, LCD_HEIGHT);
 
 // ServoDAC instance (chargePin, dischargePin, feedbackPin)
-ServoDAC dac(PIN_OUT, PIN_RESET, PIN_CIRCUIT_IN);
+ServoDAC dac(PIN_CHARGE, PIN_DISCHARGE, PIN_FEEDBACK);
 
 static void updateLCD(float target, const ServoDAC::Result& r) {
   // target voltage
@@ -31,7 +30,7 @@ static void updateLCD(float target, const ServoDAC::Result& r) {
   // pulse width
   lcd.setCursor(0, 1);
   lcd.print(r.pulse_us);
-  lcd.print(F("us  "));
+  lcd.print(F("us   "));
 
   // actual output voltage
   lcd.setCursor(8, 0);
@@ -39,9 +38,13 @@ static void updateLCD(float target, const ServoDAC::Result& r) {
   lcd.print(F("V  "));
 
   // error
-  lcd.setCursor(8, 1);
-  lcd.print(r.error_v);
-  lcd.print(F("V  "));
+  lcd.setCursor(7, 1);
+  if (r.error_v > -0.02f) {
+    lcd.print(F(" 0.00V "));
+  } else {
+    lcd.print(r.error_v);
+    lcd.print(F("V  "));
+  }
 }
 
 unsigned int loopCt = 0;
@@ -57,8 +60,6 @@ void setup() {
   lcd.init();
   lcd.backlight();
   lcd.clear();
-
-  Serial.begin(BAUD_RATE);
 }
 
 void loop() {
