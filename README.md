@@ -1,6 +1,7 @@
 # ServoDAC
 
-**ServoDAC** is a digitally controlled, closed-loop DAC implemented using a microcontroller GPIO pin, an RC storage capacitor, and firmware-controlled charge/discharge pulses.  
+**ServoDAC** is a digitally controlled, closed-loop DAC implemented using a microcontroller GPIO pin, an RC storage capacitor, and firmware-controlled charge/discharge pulses.
+
 Instead of relying on PWM averaging or resistor ladders, ServoDAC directly **controls the charge on a capacitor** and continuously corrects it using feedback — much like a servo system.
 
 The result is a stable, low-noise analog voltage with predictable dynamics and no PWM carrier ripple.
