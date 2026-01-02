@@ -1,5 +1,3 @@
-l
-l
 #include "LiquidCrystal_I2C.h"
 
 #include <limits.h>
