@@ -71,7 +71,7 @@ The ServoDAC library handles the charge, discharge, and feedback pins.
 ### Components
 
 - **M1**: Arduino Nano V3  
-- **I1**: LMC6482 (dual rail-to-rail, ultra-low input bias op-amp)  
+- **I1**: Any dual rail-to-rail op-amp. Recommended LMC6482 (ultra-low input bias)  
 - **Q1**: 2N7000 N-MOSFET  
 - **R1**: 1 kΩ (charge resistor)  
 - **R_D**: 1 kΩ (discharge resistor, on MOSFET drain)  
@@ -88,8 +88,6 @@ The ServoDAC library handles the charge, discharge, and feedback pins.
 - **A3** → target input
 - **A4 / A5** → LCD1602 (I²C)
 
----
-
 ## Why This Works Well
 
 - No PWM carrier ripple
@@ -98,9 +96,7 @@ The ServoDAC library handles the charge, discharge, and feedback pins.
 - Analog performance improves with better op-amp choice
 - Filter requirements are minimal (1-pole is sufficient)
 
-The system naturally produces occasional “maintenance pulses” to compensate for leakage — this is expected and visible on a scope.
-
----
+To account for op-amp leakage current, your code must call ServoDAC periodically to send a compensating dose of charge to the capacitor. For this reason the example sketch produces occasional “maintenance pulses” to compensate for leakage.
 
 ## Limitations & Tradeoffs
 
