@@ -35,7 +35,7 @@ Refer to [examples/servodac_test](examples/servodac_test/servodac_test.ino). Her
 
 The ServoDAC library handles the charge, discharge, and feedback pins.
 
-Pin assignments can be changed.
+Pin assignments can be changed. The feedback pin must be an analog input pin.
 
 ![schematic](schematic.png)
 
@@ -71,12 +71,10 @@ The system behaves like a servo, not a PWM filter.
 
 ---
 
-
-
 ### Components
 
-- **M1**: Arduino 
-- **I1**: Any dual rail-to-rail op-amp. Recommended LMC6482 (ultra-low input bias); see notes.
+- **M1**: Arduino (Nano V3, Uno)
+- **I1**: dual rail-to-rail op-amp. Recommended LMC6482 (ultra-low input bias); see note.
 - **Q1**: 2N7000 N-MOSFET  
 - **R1**: 1 kΩ (charge resistor)  
 - **R_D**: 1 kΩ (discharge resistor, on MOSFET drain)  
@@ -84,6 +82,8 @@ The system behaves like a servo, not a PWM filter.
 - **R2**: 10 kΩ (post-filter)  
 - **C2**: 100 nF (post-filter)  
 - **L1**: LCD1602 with I²C backpack  
+
+To account for op-amp leakage current, your code must call ServoDAC periodically to send a compensating dose of charge to the capacitor. For this reason the example sketch produces occasional “maintenance pulses” to compensate for leakage.
 
 ### Key Connections
 
@@ -100,8 +100,6 @@ The system behaves like a servo, not a PWM filter.
 - Leakage and drift are automatically corrected
 - Analog performance improves with better op-amp choice
 - Filter requirements are minimal (1-pole is sufficient)
-
-To account for op-amp leakage current, your code must call ServoDAC periodically to send a compensating dose of charge to the capacitor. For this reason the example sketch produces occasional “maintenance pulses” to compensate for leakage.
 
 ## Limitations & Tradeoffs
 
