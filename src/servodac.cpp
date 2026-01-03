@@ -2,10 +2,12 @@
 
 #include <math.h>   // logf, fabsf
 
-ServoDAC::ServoDAC(uint8_t chargePin, uint8_t dischargePin, uint8_t feedbackPin)
+ServoDAC::ServoDAC(uint8_t chargePin, uint8_t dischargePin, uint8_t feedbackPin, float tau, float rd)
 : charge_pin_(chargePin),
   discharge_pin_(dischargePin),
-  feedback_pin_(feedbackPin) {}
+  feedback_pin_(feedbackPin),
+  tau_(tau),
+  rd_(rd) {}
 
 void ServoDAC::begin() {
   // Discharge pin is a digital output (assumed active-high discharge).
@@ -25,7 +27,7 @@ float ServoDAC::adcToVoltage(int raw) {
   return raw * V_IN / 1023.0f;
 }
 
-float ServoDAC::readSampleVoltage() const {
+float ServoDAC::readFeedbackVoltage() const {
   return adcToVoltage(analogRead(feedback_pin_));
 }
 
@@ -53,8 +55,6 @@ unsigned int ServoDAC::calcChargePulse(float target, float sample) {
   // If sample is already basically at the rail, you can't charge higher meaningfully
   if ((V_IN - sample) <= EPS_V) return 0;
 
-  const float tau = RC_OHMS * C_F;  // seconds
-
   const float denom = (V_IN - sample);
   const float numer = (V_IN - target);
 
@@ -66,7 +66,7 @@ unsigned int ServoDAC::calcChargePulse(float target, float sample) {
   }
   if (ratio >= 1.0f) return 0; // target ~= sample
 
-  const float t_sec = -tau * logf(ratio);
+  const float t_sec = -tau_ * logf(ratio);
   const float t_us_f = t_sec * 1e6f;
 
   if (t_us_f <= 0.0f) return 0;
@@ -82,7 +82,6 @@ unsigned int ServoDAC::calcDischargePulse(float target, float sample) {
   if (target < EPS_V) target = EPS_V;
   if (sample < EPS_V) sample = EPS_V;
 
-  const float tau = RD_OHMS * C_F;  // seconds
 
   const float ratio = target / sample;
 
@@ -90,7 +89,7 @@ unsigned int ServoDAC::calcDischargePulse(float target, float sample) {
   if (ratio <= EPS_RATIO) return (unsigned int)MAX_DISCHARGE_PULSE_US;
   if (ratio >= 1.0f) return 0;
 
-  const float t_sec = -tau * logf(ratio);
+  const float t_sec = -tau_ * logf(ratio);
   const float t_us_f = t_sec * 1e6f;
 
   if (t_us_f <= 0.0f) return 0;
@@ -101,7 +100,7 @@ unsigned int ServoDAC::calcDischargePulse(float target, float sample) {
 
 ServoDAC::Result ServoDAC::update(float target_v) {
   Result r{};
-  r.sample_v = readSampleVoltage();
+  r.sample_v = readFeedbackVoltage();
   r.error_v = target_v - r.sample_v;
   r.pulse_us = 0;
   r.did_charge = false;

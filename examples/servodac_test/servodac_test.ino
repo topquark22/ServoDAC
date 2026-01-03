@@ -1,6 +1,9 @@
 #include "LiquidCrystal_I2C.h"
 #include "servodac.h"
 
+const float TAU = 1.0e-3; // RC time constant
+const float RD = 1000;    // discharge resistor
+
 // --- wiring pins (matching the original sketch defaults) ---
 const uint8_t PIN_CHARGE     = 5;   // charge pin (pulse high, then hi-Z)
 const uint8_t PIN_DISCHARGE  = 4;   // discharge pin (active-high)
@@ -19,7 +22,7 @@ const uint8_t LCD_HEIGHT = 2;
 LiquidCrystal_I2C lcd(LCD_I2C_ADDR, LCD_WIDTH, LCD_HEIGHT);
 
 // ServoDAC instance (chargePin, dischargePin, feedbackPin)
-ServoDAC dac(PIN_CHARGE, PIN_DISCHARGE, PIN_FEEDBACK);
+ServoDAC dac(PIN_CHARGE, PIN_DISCHARGE, PIN_FEEDBACK, TAU, RD);
 
 static void updateLCD(float target, const ServoDAC::Result& r) {
   // target voltage
@@ -69,7 +72,7 @@ void loop() {
   // --- target sample ---
   const int target_raw = analogRead(PIN_TEST_IN);
   const float target_v = ServoDAC::adcToVoltage(target_raw);
-
+  
   // --- control step ---
   const ServoDAC::Result r = dac.update(target_v);
 
