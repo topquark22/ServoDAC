@@ -75,13 +75,15 @@ The system behaves like a servo, not a PWM filter.
 
 - **M1**: Arduino (Nano V3, Uno)
 - **I1**: dual rail-to-rail op-amp. Recommended LMC6482 (ultra-low input bias); see note.
-- **Q1**: 2N7000 N-MOSFET  
-- **R1**: 1 kΩ (charge resistor)  
-- **R_D**: 1 kΩ (discharge resistor, on MOSFET drain)  
-- **C1**: 1 µF Mylar (primary storage capacitor)  
+- **Q1**: 2N7000 N-MOSFET, or bipolar junction transistor (2N3904 or similar)  
+- **R1**: 1kΩ (charge resistor)  
+- **R_D**: 1kΩ (discharge resistor, on MOSFET drain/BJT collector
+- **C1**: 1µF Mylar (primary storage capacitor)  
 - **R2**: 10 kΩ (post-filter)  
 - **C2**: 100 nF (post-filter)  
 - **L1**: LCD1602 with I²C backpack  
+
+R1, C1 values can be changed, but the library assumes a time constant R1 C1 = 1.0 x 10^{-3}.
 
 To account for op-amp leakage current, your code must call ServoDAC periodically to send a compensating dose of charge to the capacitor. For this reason the example sketch produces occasional “maintenance pulses” to compensate for leakage.
 
