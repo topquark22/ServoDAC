@@ -29,7 +29,7 @@ This makes the DAC **self-correcting**, insensitive to leakage, and largely inde
 
 ## Example Circuit: Input Follower
 
-Refer to [examples/servodac_test](examples/servodac_test/servodac_test.ino).
+Refer to [examples/input_follower](examples/input_follower/input_follower.ino).
 
 Here, the sketch is responsible for the analog input pin, the LCD, and invoking the ServoDAC refresh cycle. 
 
