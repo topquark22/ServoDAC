@@ -21,9 +21,8 @@ void ServoDAC::begin() {
 }
 
 float ServoDAC::adcToVoltage(int raw) {
-  // Arduino ADC is 10-bit: 0..1023 represents 0..V_IN, but the original sketch used /1024.
-  // Keep behavior identical to the original sketch.
-  return raw * V_IN / 1024.0f;
+  // Arduino ADC is 10-bit: 0..1023 represents 0..V_IN
+  return raw * V_IN / 1023.0f;
 }
 
 float ServoDAC::readSampleVoltage() const {
