@@ -83,7 +83,7 @@ The system behaves like a servo, not a PWM filter.
 - **C2**: 100 nF (post-filter)
 - **L1**: LCD1602 with I²C backpack
 
-R1, C1 values can be changed, but the library assumes a time constant R1 C1 = 1.0 x 10^{-3}.
+R1, C1 values can be changed, but the library assumes a time constant R1 C1 = 1 ms.
 
 To account for any op-amp leakage current, update the target voltage periodically to send a compensating dose of charge to the capacitor.
 
