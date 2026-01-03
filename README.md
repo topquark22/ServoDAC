@@ -75,9 +75,9 @@ The system behaves like a servo, not a PWM filter.
 
 - **M1**: Arduino (Nano V3, Uno)
 - **I1**: dual rail-to-rail op-amp. Recommended LMC6482 (ultra-low input bias); see note.
-- **Q1**: 2N7000 N-MOSFET, or bipolar junction transistor (2N3904 or similar)  
+- **Q1**: 2N7000 N-MOSFET 
 - **R1**: 1kΩ (charge resistor)  
-- **R_D**: 1kΩ (discharge resistor, on MOSFET drain/BJT collector
+- **R_D**: 1kΩ (discharge resistor, on MOSFET drain
 - **C1**: 1µF Mylar (primary storage capacitor)  
 - **R2**: 10 kΩ (post-filter)  
 - **C2**: 100 nF (post-filter)  
