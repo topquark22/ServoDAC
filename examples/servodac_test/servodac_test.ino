@@ -42,12 +42,8 @@ static void updateLCD(float target, const ServoDAC::Result& r) {
 
   // error
   lcd.setCursor(7, 1);
-  if (r.error_v > -0.02f) {
-    lcd.print(F(" 0.00V "));
-  } else {
-    lcd.print(r.error_v);
-    lcd.print(F("V  "));
-  }
+  lcd.print(r.error_v);
+  lcd.print(F("V  "));
 }
 
 unsigned int loopCt = 0;
