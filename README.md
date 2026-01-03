@@ -85,7 +85,7 @@ The system behaves like a servo, not a PWM filter.
 
 R1, C1 values can be changed, but the library assumes a time constant R1 C1 = 1.0 x 10^{-3}.
 
-To account for op-amp leakage current, your code must call ServoDAC periodically to send a compensating dose of charge to the capacitor. For this reason the example sketch produces occasional “maintenance pulses” to compensate for leakage.
+To account for any op-amp leakage current, update the target voltage periodically to send a compensating dose of charge to the capacitor.
 
 ### Key Connections
 
