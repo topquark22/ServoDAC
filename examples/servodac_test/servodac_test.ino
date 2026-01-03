@@ -1,8 +1,8 @@
 #include "LiquidCrystal_I2C.h"
 #include "servodac.h"
 
-const float TAU = 1.0e-3; // RC time constant
-const float RD = 1000;    // discharge resistor
+const float TAU = 1.0e-3; // time constant R1 * C1 (seconds)
+const float RD = 1000;    // discharge resistor (ohms)
 
 // --- wiring pins (matching the original sketch defaults) ---
 const uint8_t PIN_CHARGE     = 5;   // charge pin (pulse high, then hi-Z)
@@ -72,7 +72,7 @@ void loop() {
   // --- target sample ---
   const int target_raw = analogRead(PIN_TEST_IN);
   const float target_v = ServoDAC::adcToVoltage(target_raw);
-  
+
   // --- control step ---
   const ServoDAC::Result r = dac.update(target_v);
 
