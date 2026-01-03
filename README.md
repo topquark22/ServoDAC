@@ -74,14 +74,14 @@ The system behaves like a servo, not a PWM filter.
 ### Components
 
 - **M1**: Arduino (Nano V3, Uno)
-- **I1**: dual rail-to-rail op-amp. Recommended LMC6482 (ultra-low input bias); see note.
-- **Q1**: 2N7000 N-MOSFET 
+- **I1**: LMC6482 (dual rail-to-rail op-amp, ultra-low input bias)
+- **Q1**: 2N7000 N-MOSFET
 - **R1**: 1kΩ (charge resistor)  
-- **R_D**: 1kΩ (discharge resistor, on MOSFET drain)
-- **C1**: 1µF Mylar (primary storage capacitor)  
-- **R2**: 10 kΩ (post-filter)  
-- **C2**: 100 nF (post-filter)  
-- **L1**: LCD1602 with I²C backpack  
+- **R_D**: 1kΩ (discharge resistor)
+- **C1**: 1µF film (Mylar or PP)
+- **R2**: 10 kΩ (post-filter)
+- **C2**: 100 nF (post-filter)
+- **L1**: LCD1602 with I²C backpack
 
 R1, C1 values can be changed, but the library assumes a time constant R1 C1 = 1.0 x 10^{-3}.
 
