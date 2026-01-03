@@ -18,6 +18,13 @@ public:
     bool did_discharge;      // true if discharge pulse was applied
   };
 
+/*
+ * chargePin       Data output pin to charging resistor
+ * dischargePin    Data output pin to MOSFET base (via protection resistor)
+ * feedbackPin     Analog input pin to C1 node
+ * tau             RC time constant R1 * R2 (seconds)
+ * rd              Discharge resistor (ohms)
+ */
   ServoDAC(uint8_t chargePin, uint8_t dischargePin, uint8_t feedbackPin, float tau, float rd);
 
   // Configure pins and set safe initial states.
