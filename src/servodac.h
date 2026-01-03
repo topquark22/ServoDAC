@@ -19,8 +19,8 @@ public:
   };
 
 /*
- * chargePin       Data output pin to charging resistor
- * dischargePin    Data output pin to MOSFET base (via protection resistor)
+ * chargePin       Data output pin to charging resistor R1
+ * dischargePin    Data output pin to Q1 MOSFET base (via protection resistor)
  * feedbackPin     Analog input pin to C1 node
  * tau             RC time constant R1 * R2 (seconds)
  * rd              Discharge resistor (ohms)
