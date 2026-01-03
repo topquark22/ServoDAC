@@ -27,9 +27,7 @@ This makes the DAC **self-correcting**, insensitive to leakage, and largely inde
 
 ---
 
-## Architecture
-
-### The Example Circuit
+## The Example Circuit
 
 Refer to [examples/servodac_test](examples/servodac_test/servodac_test.ino). Here, the test code is responsible for the test input pin, the LCD, and implementing the ServoDAC refresh cycle. 
 
@@ -82,8 +80,6 @@ The system behaves like a servo, not a PWM filter.
 - **R2**: 10 kΩ (post-filter)
 - **C2**: 100 nF (post-filter)
 - **L1**: LCD1602 with I²C backpack
-
-R1, C1 values can be changed, but the library assumes a time constant R1 C1 = 1 ms.
 
 To account for any op-amp leakage current, update the target voltage periodically to send a compensating dose of charge to the capacitor.
 
