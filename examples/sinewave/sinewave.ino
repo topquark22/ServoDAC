@@ -8,12 +8,14 @@ const uint8_t PIN_CHARGE     = 5;   // charge pin (pulse high, then hi-Z)
 const uint8_t PIN_DISCHARGE  = 4;   // discharge pin (active-high)
 const uint8_t PIN_FEEDBACK   = A2;  // feedback pin
 
+const uint8_t PIN_FREQUENCY = A3;   // connect to voltage divider  
+
 // R1 = 1K
 // C11 = 1uf
 const float TAU = 1.0e-3; // time constant R1 * C1 (seconds)
 const float RD = 1000;    // discharge resistor (ohms)
 
-const uint8_t PIN_FREQUENCY = A3;
+const float MAX_FREQUENCY = 20.0f;
 
 const float Vin = 5.0;
 const float Vout = 5.0;
@@ -41,7 +43,7 @@ void setup() {
 }
 
 float toFrequency(float voltage) {
-  return 20.0 * (voltage / Vout); // TODO make exponential
+  return MAX_FREQUENCY * (voltage / Vout); // TODO make exponential
 }
 
 float t1 = 0;
