@@ -57,7 +57,7 @@ void loop() {
 
   } else {
     float t1 = t0 - (f0 / f) * (t - t0);
-    float y = sin(f * (t - t1));
+    float y = sin(2 * PI * f * (t - t1));
 
     float v = (y + 1) * (Vout / 2);
     dac.update(v);
