@@ -73,15 +73,15 @@ The system behaves like a servo, not a PWM filter.
 
 ### Components
 
-- **M1**: Arduino (Nano V3, Uno)
-- **I1**: LMC6482 (dual rail-to-rail op-amp, ultra-low input bias)
-- **Q1**: 2N7000 N-MOSFET
-- **R1**: 1kΩ (charge resistor)  
+- **M1**:  Arduino (Nano V3, Uno)
+- **I1**:  LMC6482 (dual rail-to-rail op-amp, ultra-low input bias)
+- **Q1**:  2N7000 N-MOSFET
+- **R1**:  2.2kΩ (charge resistor)
+- **C1**:  470nF film (Mylar or PP)  
 - **R_D**: 1kΩ (discharge resistor)
-- **C1**: 1µF film (Mylar or PP)
-- **R2**: 10 kΩ (post-filter)
-- **C2**: 100 nF (post-filter)
-- **L1**: LCD1602 with I²C backpack
+- **R2**:  10 kΩ (post-filter)
+- **C2**:  100 nF (post-filter)
+- **L1**:  LCD1602 with I²C backpack
 
 To account for any op-amp leakage current, update the target voltage periodically to send a compensating dose of charge to the capacitor.
 

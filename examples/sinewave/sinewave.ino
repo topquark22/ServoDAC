@@ -10,8 +10,8 @@ const uint8_t PIN_FEEDBACK   = A2;  // feedback pin
 
 const uint8_t PIN_FREQUENCY = A3;   // connect to voltage divider  
 
-// R1 = 1K
-// C11 = 1uf
+// R1 = 2.2K
+// C11 = 470nf
 const float TAU = 1.0e-3; // time constant R1 * C1 (seconds)
 const float RD = 1000;    // discharge resistor (ohms)
 
