@@ -67,7 +67,7 @@ void loop() {
 
   int v_raw = pin.read();
 
-  float v = v_raw / 1023.0f;
+  float v = v_raw * Vin / 1023.0f;
 
   float t = (micros() - start_us) * 1.0e-6f;
   float f = toFrequency(v);
