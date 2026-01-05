@@ -1,6 +1,5 @@
-
 #include "servodac.h"
-#include "dejitter.h" 
+#include "gpioutils.h" 
 
 #include <math.h>
 #include "LiquidCrystal_I2C.h"
@@ -34,7 +33,6 @@ Dejitter pin(PIN_FREQUENCY);
 unsigned long start_us;
 
 void setup() {
-
   lcd.init();
   lcd.backlight();
   lcd.clear();
