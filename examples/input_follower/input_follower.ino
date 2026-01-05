@@ -15,8 +15,9 @@ const uint8_t PIN_FEEDBACK   = A2;  // feedback pin
 const uint8_t PIN_TEST_IN    = A3;  // target pin (ADC)
 
 // --- loop timing / UI ---
-const unsigned long UPDATE_INTERVAL_MS = 10; // control loop period
-const unsigned int  LCD_RATE = 25;          // update LCD every N frames
+const unsigned int UPDATE_INTERVAL_MS = 10; // control loop period
+const unsigned int LCD_RATE_MS = 250;       // update LCD every N ms
+const unsigned int LCD_RATE_FRAMES = LCD_RATE_MS / UPDATE_INTERVAL_MS;
 
 // LCD I2C address and size
 const uint8_t LCD_I2C_ADDR = 0x27;
@@ -79,7 +80,7 @@ void loop() {
   if (loopCt == 0) {
     updateLCD(target_v, r);
   }
-  loopCt = (loopCt + 1) % LCD_RATE;
+  loopCt = (loopCt + 1) % LCD_RATE_FRAMES;
 
   // --- wait until next frame boundary ---
   next_us += (unsigned long)UPDATE_INTERVAL_MS * 1000UL;

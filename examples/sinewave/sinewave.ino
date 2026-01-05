@@ -13,7 +13,7 @@ const uint8_t PIN_FEEDBACK   = A2;  // feedback pin
 const uint8_t PIN_FREQUENCY = A3;   // connect to voltage divider  
 
 // R1 = 2.2K
-// C11 = 470nf
+// C1 = 470nf
 const float TAU = 1.0e-3; // time constant R1 * C1 (seconds)
 const float RD = 1000;    // discharge resistor (ohms)
 
@@ -62,11 +62,8 @@ float f0 = 0;
 float t0 = 0;
 
 void loop() {
-  static unsigned long next_us = 0;
-  if (next_us == 0) next_us = micros();
 
   int v_raw = pin.read();
-
   float v = v_raw * Vin / 1023.0f;
 
   float t = (micros() - start_us) * 1.0e-6f;
@@ -80,7 +77,6 @@ void loop() {
 
     float v = (y + 1) * (Vout / 2);
     dac.update(v);
-
   }
 
   if (v_raw != prev_v_raw) {
