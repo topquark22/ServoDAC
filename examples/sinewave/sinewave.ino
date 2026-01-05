@@ -1,7 +1,9 @@
 
-#include <Arduino.h>
-#include "LiquidCrystal_I2C.h"
 #include "servodac.h"
+#include "dejitter.h"
+
+#include <math.h>
+#include "LiquidCrystal_I2C.h"
 
 // --- wiring pins (matching the original sketch defaults) ---
 const uint8_t PIN_CHARGE     = 5;   // charge pin (pulse high, then hi-Z)
@@ -27,12 +29,11 @@ const uint8_t LCD_HEIGHT = 2;
 LiquidCrystal_I2C lcd(LCD_I2C_ADDR, LCD_WIDTH, LCD_HEIGHT);
 
 ServoDAC dac(PIN_CHARGE, PIN_DISCHARGE, PIN_FEEDBACK, TAU, RD);
+Dejitter pin(PIN_FREQUENCY);
 
 unsigned long start_us;
 
 void setup() {
-  // target input pin
-  pinMode(PIN_FREQUENCY, INPUT);
 
   lcd.init();
   lcd.backlight();
@@ -64,12 +65,7 @@ void loop() {
   static unsigned long next_us = 0;
   if (next_us == 0) next_us = micros();
 
-  int v_raw = analogRead(PIN_FREQUENCY);
-
-  // ignore POT jitter
-  if (abs(v_raw - prev_v_raw) < 2) {
-    v_raw = prev_v_raw;
-  }
+  int v_raw = pin.read();
 
   float v = v_raw / 1023.0f;
 
