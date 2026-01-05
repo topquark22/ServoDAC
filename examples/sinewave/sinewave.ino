@@ -65,14 +65,19 @@ void loop() {
   if (next_us == 0) next_us = micros();
 
   int v_raw = analogRead(PIN_FREQUENCY);
-  float v = ServoDAC::adcToVoltage(v_raw);
+
+  // ignore POT jitter
+  if (abs(v_raw - prev_v_raw) < 2) {
+    v_raw = prev_v_raw;
+  }
+
+  float v = v_raw / 1023.0f;
 
   float t = (micros() - start_us) * 1.0e-6f;
   float f = toFrequency(v);
 
   if (f == 0) {
     dac.update(Vout / 2);
-
   } else {
     float t1 = t0 - (f0 / f) * (t - t0);
     float y = sin(2 * PI * f * (t - t1));
