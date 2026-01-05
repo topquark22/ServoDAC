@@ -1,6 +1,9 @@
 #include "LiquidCrystal_I2C.h"
 #include "servodac.h"
 
+// R1 = 2.2K
+// C1 = 470nF
+// tau = R1 * C1 = 1.0 ms
 const float TAU = 1.0e-3; // time constant R1 * C1 (seconds)
 const float RD = 1000;    // discharge resistor (ohms)
 
@@ -39,6 +42,7 @@ static void updateLCD(float target, const ServoDAC::Result& r) {
   lcd.setCursor(8, 0);
   lcd.print(r.sample_v);
   lcd.print(F("V  "));
+
 
   // error
   lcd.setCursor(7, 1);
