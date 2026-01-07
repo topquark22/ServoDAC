@@ -1,0 +1,35 @@
+{
+    "configurations": [
+        {
+            "name": "Arduino-ServoDAC-Win",
+            "includePath": [
+                "${workspaceFolder}/src",
+                "${env:ARDUINO_LIB}/GPIOUtils/src",
+                "${env:ARDUINO_LIB}/hd44780",
+                "${env:ARDUINO_LIB}/**",
+                "${env:ARDUINO15}/packages/arduino/hardware/avr/1.8.6/libraries/Wire/src",
+                "${env:ARDUINO15}/packages/arduino/hardware/avr/1.8.6/cores/arduino",
+                "${env:ARDUINO15}/packages/arduino/hardware/avr/1.8.6/variants/standard"
+            ],
+            "defines": [
+                "F_CPU=16000000L",
+                "ARDUINO"
+            ],
+            "compilerPath": "C:/Users/gtf/AppData/Local/Arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino7/bin/avr-gcc.exe",
+            "intelliSenseMode": "windows-gcc-arm",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "browse": {
+                "path": [
+                    "${workspaceFolder}",
+                    "${env:ARDUINO_LIB}",
+                    "${env:ARDUINO_LIB}/hd44780",
+                    "${env:ARDUINO15}/packages/arduino/hardware/avr/1.8.6/cores/arduino",
+                    "${env:ARDUINO15}/packages/arduino/hardware/avr/1.8.6/libraries/Wire/src"
+                ],
+                "limitSymbolsToIncludedHeaders": true
+            }
+        }
+    ],
+    "version": 4
+}

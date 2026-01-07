@@ -1,0 +1,6 @@
+{
+  "files.associations": {
+    "*.ino": "cpp"
+  },
+  "C_Cpp.default.compilerPath": "${env:ARDUINO15}/packages/arduino/tools/avr-gcc/*/bin/avr-gcc.exe"
+}
