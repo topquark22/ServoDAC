@@ -6,6 +6,7 @@
 			"type": "pickString",
 			"description": "Select ServoDAC example to compile",
 			"options": [
+				"spec",
 				"input_follower",
 				"sinewave"
 			]
