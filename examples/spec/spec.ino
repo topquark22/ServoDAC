@@ -1,3 +1,5 @@
+#include <Arduino.h>
+
 #include <LiquidCrystal_I2C.h>
 
 #include "servodac.h"
@@ -15,25 +17,25 @@
 */
 
 // --- wiring pins (adjust if your hardware differs) ---
-static const uint8_t PIN_CHARGE    = 5;   // charge pin (pulse high, then hi-Z)
-static const uint8_t PIN_DISCHARGE = 4;   // discharge pin (active-high)
-static const uint8_t PIN_FEEDBACK  = A2;  // feedback pin (ADC)
+static const uint8_t PIN_CHARGE = 5;    // charge pin (pulse high, then hi-Z)
+static const uint8_t PIN_DISCHARGE = 4; // discharge pin (active-high)
+static const uint8_t PIN_FEEDBACK = A2; // feedback pin (ADC)
 
 // RC constants (match your build; these mirror the other examples)
 // tau = R * C  (seconds)
-static const float TAU = 1.0e-3f;   // ~1ms (example value)
-static const float RD  = 1000.0f;   // discharge resistor (ohms)
+static const float TAU = 1.0e-3f; // ~1ms (example value)
+static const float RD = 1000.0f;  // discharge resistor (ohms)
 
 // Control loop
 static const unsigned int UPDATE_INTERVAL_MS = 10;
 
 // LCD (16x2 I2C; adjust address if needed)
-static const uint8_t LCD_ADDR   = 0x27;
-static const uint8_t LCD_WIDTH  = 16;
+static const uint8_t LCD_ADDR = 0x27;
+static const uint8_t LCD_WIDTH = 16;
 static const uint8_t LCD_HEIGHT = 2;
 
 // Update LCD no faster than this
-static const unsigned int LCD_RATE_MS     = 250;
+static const unsigned int LCD_RATE_MS = 250;
 static const unsigned int LCD_RATE_FRAMES = LCD_RATE_MS / UPDATE_INTERVAL_MS;
 
 LiquidCrystal_I2C lcd(LCD_ADDR, LCD_WIDTH, LCD_HEIGHT);
@@ -41,7 +43,8 @@ ServoDAC dac(PIN_CHARGE, PIN_DISCHARGE, PIN_FEEDBACK, TAU, RD);
 
 static float g_target_v = 0.0f;
 
-static void printHelp() {
+static void printHelp()
+{
   Serial.println();
   Serial.println(F("ServoDAC spec example"));
   Serial.println(F("Enter a voltage (0.0 to 5.0) and press Enter."));
@@ -50,7 +53,8 @@ static void printHelp() {
   Serial.println();
 }
 
-static void updateLCD(float target, const ServoDAC::Result& r) {
+static void updateLCD(float target, const ServoDAC::Result &r)
+{
   // Row 0: target and measured
   lcd.setCursor(0, 0);
   lcd.print(target, 3);
@@ -70,18 +74,23 @@ static void updateLCD(float target, const ServoDAC::Result& r) {
   lcd.print(F("V "));
 }
 
-static bool tryHandleCommand() {
+static bool tryHandleCommand()
+{
   // Non-blocking: only act if something is available
-  if (Serial.available() <= 0) return false;
+  if (Serial.available() <= 0)
+    return false;
 
   // Peek for '?' as a "help" command
   int c = Serial.peek();
-  if (c == '?') {
+  if (c == '?')
+  {
     Serial.read(); // consume '?'
     // consume remainder of line (if any)
-    while (Serial.available() > 0) {
+    while (Serial.available() > 0)
+    {
       char ch = (char)Serial.read();
-      if (ch == '\n' || ch == '\r') break;
+      if (ch == '\n' || ch == '\r')
+        break;
     }
     printHelp();
     return true;
@@ -91,16 +100,20 @@ static bool tryHandleCommand() {
   float v = Serial.parseFloat(); // reads until it finds a number; stops at non-number
 
   // Flush remainder of the line so the next read is clean
-  while (Serial.available() > 0) {
+  while (Serial.available() > 0)
+  {
     char ch = (char)Serial.read();
-    if (ch == '\n' || ch == '\r') break;
+    if (ch == '\n' || ch == '\r')
+      break;
   }
 
   // If parseFloat found nothing, it returns 0.0 after timeout.
   // We keep it simple: treat it as a valid "0" command unless input was junk.
   // If you want stricter behavior, shorten Serial timeout and/or add a prompt.
-  if (v < 0.0f) v = 0.0f;
-  if (v > 5.0f) v = 5.0f;
+  if (v < 0.0f)
+    v = 0.0f;
+  if (v > 5.0f)
+    v = 5.0f;
 
   g_target_v = v;
 
@@ -111,10 +124,13 @@ static bool tryHandleCommand() {
   return true;
 }
 
-void setup() {
+void setup()
+{
   Serial.begin(115200);
   // On Nano this returns immediately; on native-USB boards it may wait.
-  while (!Serial) { /* no-op */ }
+  while (!Serial)
+  { /* no-op */
+  }
 
   // Make parseFloat snappier (default is 1000 ms)
   Serial.setTimeout(50);
@@ -131,7 +147,8 @@ void setup() {
   Serial.println(F(" V"));
 }
 
-void loop() {
+void loop()
+{
   static unsigned long next_us = micros();
   static unsigned int loopCt = 0;
 
@@ -141,14 +158,16 @@ void loop() {
   // --- control step ---
   const ServoDAC::Result r = dac.update(g_target_v);
 
-  if (loopCt == 0) {
+  if (loopCt == 0)
+  {
     updateLCD(g_target_v, r);
   }
   loopCt = (loopCt + 1) % LCD_RATE_FRAMES;
 
   // --- wait until next frame boundary ---
   next_us += (unsigned long)UPDATE_INTERVAL_MS * 1000UL;
-  while ((long)(micros() - next_us) < 0) {
+  while ((long)(micros() - next_us) < 0)
+  {
     // spin
   }
 }
