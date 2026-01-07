@@ -19,6 +19,9 @@ const float RD = 1000;     // discharge resistor (ohms)
 
 const float MAX_FREQUENCY = 20.0f;
 
+// frequency max skew per second
+const float F_SKEW = 40.0f;
+
 const float Vin = 5.0;
 const float Vout = 5.0;
 
@@ -30,7 +33,7 @@ LiquidCrystal_I2C lcd(LCD_ADDR, LCD_WIDTH, LCD_HEIGHT);
 
 ServoDAC dac(PIN_CHARGE, PIN_DISCHARGE, PIN_FEEDBACK, TAU, RD);
 Dejitter pin(PIN_FREQUENCY, 2);
-RateLimiter lim(300.0f, 300.0f);
+RateLimiter lim(F_SKEW, F_SKEW);
 
 unsigned long start_ms;
 
