@@ -1,8 +1,8 @@
+#include <math.h>
+#include <LiquidCrystal_I2C.h>
+
 #include "servodac.h"
 #include "gpioutils.h" 
-
-#include <math.h>
-#include "LiquidCrystal_I2C.h"
 
 // --- wiring pins (matching the original sketch defaults) ---
 const uint8_t PIN_CHARGE     = 5;   // charge pin (pulse high, then hi-Z)
