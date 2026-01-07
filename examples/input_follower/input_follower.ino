@@ -1,7 +1,4 @@
-// replacement for LiquidCrystal_I2C library
-#include <Wire.h>
-#include <hd44780.h>
-#include <hd44780ioClass/hd44780_I2Cexp.h>
+#include <LiquidCrystal_I2C.h>
 
 #include "servodac.h"
 
@@ -23,10 +20,11 @@ const unsigned int UPDATE_INTERVAL_MS = 10; // control loop period
 const unsigned int LCD_RATE_MS = 250;       // update LCD every N ms
 const unsigned int LCD_RATE_FRAMES = LCD_RATE_MS / UPDATE_INTERVAL_MS;
 
-// LCD I2C size
+// LCD I2C addr and size
+const uint8_t LCD_ADDR = 0x27;
 const uint8_t LCD_WIDTH = 16;
 const uint8_t LCD_HEIGHT = 2;
-hd44780_I2Cexp lcd;
+LiquidCrystal_I2C lcd(LCD_ADDR, LCD_WIDTH, LCD_HEIGHT);
 
 // ServoDAC instance (chargePin, dischargePin, feedbackPin)
 ServoDAC dac(PIN_CHARGE, PIN_DISCHARGE, PIN_FEEDBACK, TAU, RD);
@@ -64,7 +62,7 @@ void setup() {
   dac.begin();
 
   // LCD
-  lcd.begin(LCD_WIDTH, LCD_HEIGHT);
+  lcd.init();
   lcd.backlight();
   lcd.clear();
 }

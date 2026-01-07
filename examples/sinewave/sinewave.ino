@@ -1,9 +1,7 @@
 #include <math.h>
 
-// replacement for LiquidCrystal_I2C library
-#include <Wire.h>
-#include <hd44780.h>
-#include <hd44780ioClass/hd44780_I2Cexp.h>
+//# include <Wire.h>
+#include <LiquidCrystal_I2C.h>
 
 #include "servodac.h"
 #include "gpioutils.h" 
@@ -25,10 +23,11 @@ const float MAX_FREQUENCY = 20.0f;
 const float Vin = 5.0;
 const float Vout = 5.0;
 
-// LCD I2C size
+// LCD I2C address and size
+const uint8_t LCD_ADDR = 0x27;
 const uint8_t LCD_WIDTH = 16;
 const uint8_t LCD_HEIGHT = 2;
-hd44780_I2Cexp lcd;
+LiquidCrystal_I2C lcd(LCD_ADDR, LCD_WIDTH, LCD_HEIGHT);
 
 ServoDAC dac(PIN_CHARGE, PIN_DISCHARGE, PIN_FEEDBACK, TAU, RD);
 Dejitter pin(PIN_FREQUENCY, 2);
@@ -36,7 +35,7 @@ Dejitter pin(PIN_FREQUENCY, 2);
 unsigned long start_us;
 
 void setup() {
-  lcd.begin(LCD_WIDTH, LCD_HEIGHT);
+  lcd.init();
   lcd.backlight();
   lcd.clear();
 
