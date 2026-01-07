@@ -123,6 +123,8 @@ The name **ServoDAC** reflects the core idea:
 
 This is not PWM filtering — it is closed-loop analog control.
 
+---
+
 ## Examples
 
 ServoDAC includes several example sketches under the `examples/` directory. Each example is self-contained and demonstrates a specific usage pattern.
