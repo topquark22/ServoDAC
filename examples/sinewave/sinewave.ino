@@ -31,7 +31,7 @@ const uint8_t LCD_HEIGHT = 2;
 hd44780_I2Cexp lcd;
 
 ServoDAC dac(PIN_CHARGE, PIN_DISCHARGE, PIN_FEEDBACK, TAU, RD);
-Dejitter pin(PIN_FREQUENCY);
+Dejitter pin(PIN_FREQUENCY, 2);
 
 unsigned long start_us;
 
