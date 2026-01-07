@@ -43,6 +43,7 @@ void setup() {
   lcd.backlight();
   lcd.clear();
 
+  pin.begin();
   dac.begin();
 
   start_ms = millis();
