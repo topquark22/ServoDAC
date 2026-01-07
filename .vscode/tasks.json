@@ -20,7 +20,7 @@
 				"compile",
 				"--verbose",
 				"--libraries",
-				"C:/Users/gtf/Arduino/libraries",
+				"${env:ARDUINO_LIB}",
 				"--fqbn",
 				"arduino:avr:nano:cpu=atmega328",
 				"${workspaceFolder}/examples/${input:example}"
