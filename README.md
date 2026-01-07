@@ -122,3 +122,63 @@ The name **ServoDAC** reflects the core idea:
 > The output voltage is actively servoed to the target value.
 
 This is not PWM filtering — it is closed-loop analog control.
+
+## Examples
+
+ServoDAC includes several example sketches under the `examples/` directory. Each example is self-contained and demonstrates a specific usage pattern.
+
+### [`spec`](examples/spec)
+
+**Purpose:**  
+Manual, specification-style control of the output voltage.
+
+**Description:**  
+Reads a voltage value from the Serial console and servos the DAC output to that value. Intended for manual testing, calibration, and characterization.
+
+**Usage:**
+- Open the Serial Monitor at **115200 baud**
+- Enter a voltage (e.g. `1.25`) and press Enter
+- Output is clamped to **0.0–5.0 V**
+
+**Key features:**
+- Serial-controlled target voltage
+- Uses `Serial.parseFloat()` (AVR-safe)
+- LCD display of target, measured voltage, pulse width, and error
+
+---
+
+### [`input_follower`](examples/input_follower)
+
+**Purpose:**  
+Demonstrates closed-loop following of an analog input.
+
+**Description:**  
+Reads an input voltage (e.g. from a potentiometer) and drives the ServoDAC output to follow it smoothly using the feedback loop. This is the simplest “turn-the-knob, see-the-voltage” demonstration.
+
+**Key features:**
+- Continuous analog tracking
+- LCD readout of target, measured voltage, pulse width, and error
+- Good starting point for understanding ServoDAC behavior
+
+---
+
+### [`sinewave`](examples/sinewave)
+
+**Purpose:**  
+Demonstrates dynamic waveform generation.
+
+**Description:**  
+Generates a sine wave in software and servos the DAC output to that waveform. Useful for evaluating dynamic response, settling behavior, and loop stability.
+
+**Key features:**
+- Software-generated sine wave
+- Periodic target updates
+- LCD monitoring of output and error
+
+---
+
+### Notes
+
+- All examples assume the same basic RC DAC hardware and pin assignments.
+- Each example folder contains its own `README.md` with wiring and usage notes.
+- Examples are compiled and uploaded independently.
