@@ -1,6 +1,8 @@
 ### VS Code IntelliSense setup
 
-VS Code users should treat .ino files as C++:
+VS Code users should treat .ino files as C++ (see settings.json).
+
+Set the following environment variables:
 
 - ARDUINO_LIB  
   → path to your Arduino sketchbook `libraries` folder  
