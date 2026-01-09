@@ -1,6 +1,6 @@
 #include <LiquidCrystal_I2C.h>
 
-#include "servodac.h"
+#include "ServoDAC.h"
 
 // R1 = 2.2K
 // C1 = 470nF
@@ -9,11 +9,11 @@ const float TAU = 1.0e-3; // time constant R1 * C1 (seconds)
 const float RD = 1000;    // discharge resistor (ohms)
 
 // --- wiring pins (matching the original sketch defaults) ---
-const uint8_t PIN_CHARGE     = 5;   // charge pin (pulse high, then hi-Z)
-const uint8_t PIN_DISCHARGE  = 4;   // discharge pin (active-high)
-const uint8_t PIN_FEEDBACK   = A2;  // feedback pin
+const uint8_t PIN_CHARGE = 5;    // charge pin (pulse high, then hi-Z)
+const uint8_t PIN_DISCHARGE = 4; // discharge pin (active-high)
+const uint8_t PIN_FEEDBACK = A2; // feedback pin
 
-const uint8_t PIN_TEST_IN    = A3;  // target pin (ADC)
+const uint8_t PIN_TEST_IN = A3; // target pin (ADC)
 
 // --- loop timing / UI ---
 const unsigned int UPDATE_INTERVAL_MS = 10; // control loop period
@@ -29,7 +29,8 @@ LiquidCrystal_I2C lcd(LCD_ADDR, LCD_WIDTH, LCD_HEIGHT);
 // ServoDAC instance (chargePin, dischargePin, feedbackPin)
 ServoDAC dac(PIN_CHARGE, PIN_DISCHARGE, PIN_FEEDBACK, TAU, RD);
 
-static void updateLCD(float target, const ServoDAC::Result& r) {
+static void updateLCD(float target, const ServoDAC::Result &r)
+{
   // target voltage
   lcd.setCursor(0, 0);
   lcd.print(target);
@@ -45,7 +46,6 @@ static void updateLCD(float target, const ServoDAC::Result& r) {
   lcd.print(r.sample_v);
   lcd.print(F("V  "));
 
-
   // error
   lcd.setCursor(7, 1);
   lcd.print(r.error_v);
@@ -54,7 +54,8 @@ static void updateLCD(float target, const ServoDAC::Result& r) {
 
 unsigned int loopCt = 0;
 
-void setup() {
+void setup()
+{
   // target input pin
   pinMode(PIN_TEST_IN, INPUT);
 
@@ -67,9 +68,11 @@ void setup() {
   lcd.clear();
 }
 
-void loop() {
+void loop()
+{
   static unsigned long next_us = 0;
-  if (next_us == 0) next_us = micros();
+  if (next_us == 0)
+    next_us = micros();
 
   // --- target sample ---
   const int target_raw = analogRead(PIN_TEST_IN);
@@ -78,14 +81,16 @@ void loop() {
   // --- control step ---
   const ServoDAC::Result r = dac.update(target_v);
 
-  if (loopCt == 0) {
+  if (loopCt == 0)
+  {
     updateLCD(target_v, r);
   }
   loopCt = (loopCt + 1) % LCD_RATE_FRAMES;
 
   // --- wait until next frame boundary ---
   next_us += (unsigned long)UPDATE_INTERVAL_MS * 1000UL;
-  while ((long)(micros() - next_us) < 0) {
+  while ((long)(micros() - next_us) < 0)
+  {
     // do nothing
   }
 }

@@ -1,4 +1,4 @@
-#include "servodac.h"
+#include "ServoDAC.h"
 
 #include <math.h>   // logf, fabsf
 

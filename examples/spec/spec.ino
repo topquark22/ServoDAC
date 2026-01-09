@@ -2,7 +2,7 @@
 
 #include <LiquidCrystal_I2C.h>
 
-#include "servodac.h"
+#include "ServoDAC.h"
 
 /*
   ServoDAC - "spec" example (Serial programmable output)
