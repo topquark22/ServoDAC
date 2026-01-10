@@ -56,23 +56,23 @@ void loop() {
 
   if (Serial.available()) {
     f = Serial.parseFloat();
-    Serial.println(F("frequency = "));
+    Serial.print(F("frequency = "));
     Serial.println(f);
     updateLCD(f);
   }
 
   float t = millis() * 1.0e-3f; // seconds
 
-  if (f == 0) {
+  if (0 == f) {
     dac.update(Vout / 2);
   } else {
     float t1 = t0 - (f0 / f) * (t - t0);
     float y = sin(2 * PI * f * (t - t1));
 
     float v = (y + 1) * (Vout / 2);
+    t0 = t1;
     dac.update(v);
   }
 
-  t0 = t;
   f0 = f;
 }
