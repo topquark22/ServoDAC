@@ -29,17 +29,13 @@ ServoDAC dac(PIN_CHARGE, PIN_DISCHARGE, PIN_FEEDBACK, TAU, RD);
 
 unsigned long start_ms;
 
-float f = 0;
-
 void setup() {
   Serial.begin(115200);
   lcd.init();
   lcd.backlight();
   lcd.clear();
-
-  dac.begin();
-
   start_ms = millis();
+  dac.begin();
 
 }
 
@@ -49,30 +45,20 @@ void updateLCD(float freq) {
   lcd.print(freq);
 }
 
-float f0 = 0;
-float t0 = start_ms * 1.0e-3f; // seconds
+float f = 0;
 
 void loop() {
 
   if (Serial.available()) {
     f = Serial.parseFloat();
+    while (Serial.available()) { Serial.read(); }
     Serial.print(F("frequency = "));
     Serial.println(f);
     updateLCD(f);
   }
 
-  float t = millis() * 1.0e-3f; // seconds
-
-  if (0 == f) {
-    dac.update(Vout / 2);
-  } else {
-    float t1 = t0 - (f0 / f) * (t - t0);
-    float y = sin(2 * PI * f * (t - t1));
-
-    float v = (y + 1) * (Vout / 2);
-    t0 = t1;
-    dac.update(v);
-  }
-
-  f0 = f;
+  float t = (millis() - start_ms) * 1.0e-3f; // seconds
+  float y = sin(2 * PI * f * t);
+  float v = (y + 1) * (Vout / 2);
+  dac.update(v);
 }
