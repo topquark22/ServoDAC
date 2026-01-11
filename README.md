@@ -7,6 +7,33 @@ Instead of relying on PWM averaging or resistor ladders, ServoDAC directly **con
 The result is a stable, low-noise analog voltage with predictable dynamics and no PWM carrier ripple.
 
 ---
+## The Electronics
+
+![schematic](schematic.png)
+
+### Components
+
+- **M1**: Arduino (Nano V3, Uno)
+- **I1**: LMC6482 (dual rail-to-rail op-amp, ultra-low input bias) [1]
+- **Q1**: 2N7000 N-MOSFET
+- **R1**: 2.2kΩ (charge resistor)
+- **C1**: 470nF film (Mylar or PP)  
+- **R_D**: 1kΩ (discharge resistor)
+- **R2**: 10kΩ (post-filter)
+- **C2**: 100nF (post-filter)
+- **L1**: LCD1602 with I²C backpack, optional but used in some examples
+
+[1] If not using an ultra-low input bias op-amp, to account for any leakage current, call dac.update(v) periodically to send a compensating dose of charge to the capacitor.
+
+### Key Connections
+
+- **D3** → R1 → C1 node (charge)
+- **D4** → gate resistor → Q1 gate (discharge)
+- **A2** → C1 node (feedback)
+- **A3** → target input
+- **A4 / A5** → LCD1602 (I²C)
+- 
+---
 
 ## Concept Overview
 
@@ -40,8 +67,6 @@ The ServoDAC library handles the charge, discharge, and feedback pins.
 
 Pin assignments can be changed. The feedback pin must be an analog input pin.
 
-![schematic](schematic.png)
-
 ### Core Elements
 
 - **Microcontroller** (Arduino Nano V3)
@@ -74,27 +99,7 @@ The system behaves like a servo, not a PWM filter.
 
 ---
 
-### Components
 
-- **M1**: Arduino (Nano V3, Uno)
-- **I1**: LMC6482 (dual rail-to-rail op-amp, ultra-low input bias) [1]
-- **Q1**: 2N7000 N-MOSFET
-- **R1**: 2.2kΩ (charge resistor)
-- **C1**: 470nF film (Mylar or PP)  
-- **R_D**: 1kΩ (discharge resistor)
-- **R2**: 10kΩ (post-filter)
-- **C2**: 100nF (post-filter)
-- **L1**: LCD1602 with I²C backpack
-
-[1] If not using an ultra-low input bias op-amp, to account for any leakage current, call dac.update(v) periodically to send a compensating dose of charge to the capacitor.
-
-### Key Connections
-
-- **D3** → R1 → C1 node (charge)
-- **D4** → gate resistor → Q1 gate (discharge)
-- **A2** → C1 node (feedback)
-- **A3** → target input
-- **A4 / A5** → LCD1602 (I²C)
 
 ## Why This Works Well
 
