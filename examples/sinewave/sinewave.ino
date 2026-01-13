@@ -1,7 +1,7 @@
 #include <math.h>
 
 #include <LiquidCrystal_I2C.h>
-#include "GPIOUtils.h"
+#include <GPIOUtils.h>
 
 #include "ServoDAC.h"
 
@@ -14,10 +14,12 @@ const uint8_t PIN_FREQUENCY = A3;  // connect to voltage divider
 
 // R1 = 2.2K
 // C1 = 470nf
-const float TAU = 1.0e-3;  // time constant R1 * C1 (seconds)
-const float RD = 1000;     // discharge resistor (ohms)
+// R_D = 1.0k
+const float R1 = 2.2e3;  // Charging resistor (ohms)
+const float C1 = 470e-9; // Integrating capacitor (farads)
+const float R_D = 1.0e3;  // discharge resistor (ohms)
 
-const float MAX_FREQUENCY = 20.0f;
+const float MAX_FREQUENCY = 100.0f;
 
 // frequency max skew per second
 const float F_SKEW = 40.0f;
@@ -31,7 +33,8 @@ const uint8_t LCD_WIDTH = 16;
 const uint8_t LCD_HEIGHT = 2;
 LiquidCrystal_I2C lcd(LCD_ADDR, LCD_WIDTH, LCD_HEIGHT);
 
-ServoDAC dac(PIN_CHARGE, PIN_DISCHARGE, PIN_FEEDBACK, TAU, RD);
+ServoDAC dac(PIN_CHARGE, PIN_DISCHARGE, PIN_FEEDBACK, R1, C1, R_D);
+
 Dejitter pin(PIN_FREQUENCY, 2);
 RateLimiter lim(F_SKEW, F_SKEW);
 

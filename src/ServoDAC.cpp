@@ -2,11 +2,12 @@
 
 #include <math.h>   // logf, fabsf
 
-ServoDAC::ServoDAC(uint8_t chargePin, uint8_t dischargePin, uint8_t feedbackPin, float tau, float rd)
+ServoDAC::ServoDAC(uint8_t chargePin, uint8_t dischargePin, uint8_t feedbackPin, float r1, float c1, float rd)
 : charge_pin_(chargePin),
   discharge_pin_(dischargePin),
   feedback_pin_(feedbackPin),
-  tau_(tau),
+  r1_(r1),
+  c1_(c1),
   rd_(rd) {}
 
 void ServoDAC::begin() {
@@ -66,7 +67,7 @@ unsigned int ServoDAC::calcChargePulse(float target, float sample) {
   }
   if (ratio >= 1.0f) return 0; // target ~= sample
 
-  const float t_sec = -tau_ * logf(ratio);
+  const float t_sec = -r1_ * c1_ * logf(ratio);
   const float t_us_f = t_sec * 1e6f;
 
   if (t_us_f <= 0.0f) return 0;
@@ -89,7 +90,7 @@ unsigned int ServoDAC::calcDischargePulse(float target, float sample) {
   if (ratio <= EPS_RATIO) return (unsigned int)MAX_DISCHARGE_PULSE_US;
   if (ratio >= 1.0f) return 0;
 
-  const float t_sec = -tau_ * logf(ratio);
+  const float t_sec = -rd_ * c1_ * logf(ratio);
   const float t_us_f = t_sec * 1e6f;
 
   if (t_us_f <= 0.0f) return 0;

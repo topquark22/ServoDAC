@@ -164,7 +164,7 @@ Reads an input voltage (e.g. from a potentiometer) and drives the ServoDAC outpu
 
 ---
 
-### [`sinewave`](examples/sinewave)
+### [`sinewave_spec`](examples/sinewave_spec)
 
 **Purpose:**  
 Demonstrates dynamic waveform generation.
@@ -172,10 +172,18 @@ Demonstrates dynamic waveform generation.
 **Description:**  
 Generates a sine wave in software and servos the DAC output to that waveform. Useful for evaluating dynamic response, settling behavior, and loop stability.
 
+The frequency is read from the serial monitor.
+
 **Key features:**
 - Software-generated sine wave
 - Periodic target updates
 - LCD monitoring of output and error
+
+---
+
+## [sinewave](examples/sinewave)
+
+Like sinewave_spec, except the input is read from a voltage divider on pin A3.
 
 ---
 

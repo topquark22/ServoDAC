@@ -22,10 +22,11 @@ public:
  * chargePin       Data output pin to charging resistor R1
  * dischargePin    Data output pin to Q1 MOSFET base (via protection resistor)
  * feedbackPin     Analog input pin to C1 node
- * tau             RC time constant R1 * R2 (seconds)
+ * r1              Charging resistor (ohms)
+ * c1              Integrating capacitor (farads)
  * rd              Discharge resistor (ohms)
  */
-  ServoDAC(uint8_t chargePin, uint8_t dischargePin, uint8_t feedbackPin, float tau, float rd);
+  ServoDAC(uint8_t chargePin, uint8_t dischargePin, uint8_t feedbackPin, float r1, float c1, float rd);
 
   // Configure pins and set safe initial states.
   void begin();
@@ -43,7 +44,8 @@ private:
   uint8_t charge_pin_;
   uint8_t discharge_pin_;
   uint8_t feedback_pin_;
-  float   tau_;
+  float   r1_;
+  float   c1_;
   float   rd_;
 
   // Pin-driving primitives.
