@@ -19,7 +19,7 @@ const float R1 = 2.2e3;  // Charging resistor (ohms)
 const float C1 = 470e-9; // Integrating capacitor (farads)
 const float R_D = 1.0e3;  // discharge resistor (ohms)
 
-const float MAX_FREQUENCY = 100.0f;
+const float MAX_FREQUENCY = 40.0f;
 
 // frequency max skew per second
 const float F_SKEW = 40.0f;
@@ -35,7 +35,7 @@ LiquidCrystal_I2C lcd(LCD_ADDR, LCD_WIDTH, LCD_HEIGHT);
 
 ServoDAC dac(PIN_CHARGE, PIN_DISCHARGE, PIN_FEEDBACK, R1, C1, R_D);
 
-Dejitter pin(PIN_FREQUENCY, 2);
+Dejitter pin(PIN_FREQUENCY, 5);
 RateLimiter lim(F_SKEW, F_SKEW);
 
 unsigned long start_ms;
@@ -78,7 +78,7 @@ float t0 = 0;
 void loop() {
 
   int v_raw = pin.read();
-  float v = v_raw * Vin / 1023.0f;
+  float v = adcToFloat(v_raw) * Vin;
   float t = (millis() - start_ms) * 1.0e-3f;
   float f_unlim = toFrequency(v);
   float f = lim.read(f_unlim);
