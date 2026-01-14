@@ -2,11 +2,9 @@
 
 #include "ServoDAC.h"
 
-// R1 = 2.2K
-// C1 = 470nF
-// tau = R1 * C1 = 1.0 ms
-const float TAU = 1.0e-3; // time constant R1 * C1 (seconds)
-const float RD = 1000;    // discharge resistor (ohms)
+const float R1 = 2.2e3;  // charge resistor R1 (ohms)
+const float C1 = 470e-9; // storage capacitor C1 (farads)
+const float RD = 2.2e3;  // discharge resistor (ohms)
 
 // --- wiring pins (matching the original sketch defaults) ---
 const uint8_t PIN_CHARGE = 5;    // charge pin (pulse high, then hi-Z)
@@ -27,7 +25,7 @@ const uint8_t LCD_HEIGHT = 2;
 LiquidCrystal_I2C lcd(LCD_ADDR, LCD_WIDTH, LCD_HEIGHT);
 
 // ServoDAC instance (chargePin, dischargePin, feedbackPin)
-ServoDAC dac(PIN_CHARGE, PIN_DISCHARGE, PIN_FEEDBACK, TAU, RD);
+ServoDAC dac(PIN_CHARGE, PIN_DISCHARGE, PIN_FEEDBACK, R1, C1, RD);
 
 static void updateLCD(float target, const ServoDAC::Result &r)
 {

@@ -21,10 +21,9 @@ static const uint8_t PIN_CHARGE = 5;    // charge pin (pulse high, then hi-Z)
 static const uint8_t PIN_DISCHARGE = 4; // discharge pin (active-high)
 static const uint8_t PIN_FEEDBACK = A2; // feedback pin (ADC)
 
-// RC constants (match your build; these mirror the other examples)
-// tau = R * C  (seconds)
-static const float TAU = 1.0e-3f; // ~1ms (example value)
-static const float RD = 1000.0f;  // discharge resistor (ohms)
+const float R1 = 2.2e3;  // charge resistor R1 (ohms)
+const float C1 = 470e-9; // storage capacitor C1 (farads)
+const float RD = 2.2e3;  // discharge resistor (ohms)
 
 // Control loop
 static const unsigned int UPDATE_INTERVAL_MS = 10;
@@ -39,7 +38,7 @@ static const unsigned int LCD_RATE_MS = 250;
 static const unsigned int LCD_RATE_FRAMES = LCD_RATE_MS / UPDATE_INTERVAL_MS;
 
 LiquidCrystal_I2C lcd(LCD_ADDR, LCD_WIDTH, LCD_HEIGHT);
-ServoDAC dac(PIN_CHARGE, PIN_DISCHARGE, PIN_FEEDBACK, TAU, RD);
+ServoDAC dac(PIN_CHARGE, PIN_DISCHARGE, PIN_FEEDBACK, R1, C1, RD);
 
 static float g_target_v = 0.0f;
 
