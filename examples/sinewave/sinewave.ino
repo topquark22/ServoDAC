@@ -32,7 +32,7 @@ const uint8_t LCD_HEIGHT = 2;
 LiquidCrystal_I2C lcd(LCD_ADDR, LCD_WIDTH, LCD_HEIGHT);
 
 ServoDAC dac(PIN_CHARGE, PIN_DISCHARGE, PIN_FEEDBACK, R1, C1, R_D);
-Dejitter pin(PIN_FREQUENCY, 5);
+Dejitter pin(PIN_FREQUENCY, 2);
 
 static unsigned long start_ms;
 
@@ -45,7 +45,6 @@ float toFrequency(float potVoltage) {
 }
 
 static float f0 = 0.0f;
-static float t0 = 0.0f;
 
 void setup() {
   Serial.begin(115200);
@@ -61,9 +60,6 @@ void setup() {
   int pot = pin.read();
   float potVoltage = adcToFloat(pot, 0.0f, Vin);
   f0 = toFrequency(potVoltage);
-
-  float t = (millis() - start_ms) * 1.0e-3f;
-  t0 = t;   // start at y=0, positive slope
 }
 
 
@@ -79,14 +75,14 @@ float yToVoltage(float y) {
 
 void loop() {
   static float phaseTime = 0.0f;  // seconds into the cycle, wrapped
-  static float last_t = 0.0f;
+  static float t0 = 0.0f;
 
   int pot = pin.read();
   float potVoltage = adcToFloat(pot, 0.0f, Vin);
   float t = (millis() - start_ms) * 1.0e-3f;
 
-  float dt = t - last_t;
-  last_t = t;
+  float dt = t - t0;
+  t0 = t;
 
   float f = toFrequency(potVoltage);
 
