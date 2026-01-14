@@ -19,10 +19,8 @@ const float R1 = 2.2e3;  // Charging resistor (ohms)
 const float C1 = 470e-9; // Integrating capacitor (farads)
 const float R_D = 2.2e3;  // discharge resistor (ohms)
 
+const float MIN_FREQUENCY = 1.0f;
 const float MAX_FREQUENCY = 40.0f;
-
-// frequency max skew per second
-const float F_SKEW = 40.0f;
 
 const float Vin = 5.0;
 const float Vout = 5.0;
@@ -34,11 +32,20 @@ const uint8_t LCD_HEIGHT = 2;
 LiquidCrystal_I2C lcd(LCD_ADDR, LCD_WIDTH, LCD_HEIGHT);
 
 ServoDAC dac(PIN_CHARGE, PIN_DISCHARGE, PIN_FEEDBACK, R1, C1, R_D);
-
 Dejitter pin(PIN_FREQUENCY, 5);
-RateLimiter lim(F_SKEW, F_SKEW);
 
-unsigned long start_ms;
+static unsigned long start_ms;
+
+inline int sgn(float x) {
+  return (x > 0) - (x < 0);
+}
+
+float toFrequency(float potVoltage) {
+  return MAX_FREQUENCY * (potVoltage / Vout);  // TODO make exponential
+}
+
+static float f0 = 0.0f;
+static float t0 = 0.0f;
 
 void setup() {
   Serial.begin(115200);
@@ -51,18 +58,14 @@ void setup() {
 
   start_ms = millis();
 
-  int v_raw = pin.read();
-  float v = v_raw * Vin / 1023.0f;
-  lim.set_value(v);
-  lim.begin();
+  int pot = pin.read();
+  float potVoltage = adcToFloat(pot, 0.0f, Vin);
+  f0 = toFrequency(potVoltage);
+
+  float t = (millis() - start_ms) * 1.0e-3f;
+  t0 = t;   // start at y=0, positive slope
 }
 
-float toFrequency(float voltage) {
-  return MAX_FREQUENCY * (voltage / Vout);  // TODO make exponential
-}
-
-float t1 = 0;
-float f1 = 0;
 
 void updateLCD(float freq) {
   lcd.clear();
@@ -70,35 +73,41 @@ void updateLCD(float freq) {
   lcd.print(freq);
 }
 
-int prev_v_raw = -1;
-
-float f0 = 0;
-float t0 = 0;
+float yToVoltage(float y) {
+  return((y + 1) * (Vout / 2));
+}
 
 void loop() {
+  static float phaseTime = 0.0f;  // seconds into the cycle, wrapped
+  static float last_t = 0.0f;
 
-  int v_raw = pin.read();
-  float v = adcToFloat(v_raw) * Vin;
+  int pot = pin.read();
+  float potVoltage = adcToFloat(pot, 0.0f, Vin);
   float t = (millis() - start_ms) * 1.0e-3f;
-  float f_unlim = toFrequency(v);
-  float f = lim.read(f_unlim);
-  Serial.println(f);
 
-  if (f == 0) {
-    dac.update(Vout / 2);
+  float dt = t - last_t;
+  last_t = t;
+
+  float f = toFrequency(potVoltage);
+
+  if (fabsf(f) < 1.0e-3f) {
+    dac.update(yToVoltage(0.0f));
+    phaseTime = 0.0f;           // optional: reset when stopped
   } else {
-    float t1 = t0 - (f0 / f) * (t - t0);
-    float y = sin(2 * PI * f * (t - t1));
+    phaseTime += dt;
 
-    float v = (y + 1) * (Vout / 2);
-    dac.update(v);
+    float T = 1.0f / f;         // period
+    phaseTime = fmodf(phaseTime, T);
+    if (phaseTime < 0) phaseTime += T;
+
+    float y = sinf(2.0f * PI * f * phaseTime);
+    dac.update(yToVoltage(y));
   }
 
-  if (v_raw != prev_v_raw) {
+  // LCD update only on pot change
+  static int prev_pot = -1024;
+  if (pot != prev_pot) {
     updateLCD(f);
-    prev_v_raw = v_raw;
+    prev_pot = pot;
   }
-
-  t0 = t1;
-  f0 = f;
 }
