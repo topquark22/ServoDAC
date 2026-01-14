@@ -14,7 +14,7 @@ const uint8_t PIN_FEEDBACK = A2;  // feedback pin
 // Rd = 1.0k
 const float R1 = 2.2e3;  // Charging resistor (ohms)
 const float C1 = 470e-9; // Integrating capacitor (farads)
-const float R_D = 1.0e3;  // discharge resistor (ohms)
+const float R_D = 2.2e3;  // discharge resistor (ohms)
 
 const float Vin = 5.0;
 const float Vout = 5.0;

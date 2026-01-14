@@ -17,7 +17,7 @@ const uint8_t PIN_FREQUENCY = A3;  // connect to voltage divider
 // R_D = 1.0k
 const float R1 = 2.2e3;  // Charging resistor (ohms)
 const float C1 = 470e-9; // Integrating capacitor (farads)
-const float R_D = 1.0e3;  // discharge resistor (ohms)
+const float R_D = 2.2e3;  // discharge resistor (ohms)
 
 const float MAX_FREQUENCY = 40.0f;
 

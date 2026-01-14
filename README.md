@@ -18,7 +18,7 @@ The result is a stable, low-noise analog voltage with predictable dynamics and n
 - **Q1**: 2N7000 N-MOSFET
 - **R1**: 2.2kΩ (charge resistor)
 - **C1**: 470nF film (Mylar or PP)  
-- **R_D**: 1kΩ (discharge resistor)
+- **R_D**: 2.2kΩ (discharge resistor)
 - **R2**: 10kΩ (post-filter)
 - **C2**: 100nF (post-filter)
 - **L1**: LCD1602 with I²C backpack, optional but used in some examples
