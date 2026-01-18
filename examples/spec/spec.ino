@@ -17,13 +17,13 @@
 */
 
 // --- wiring pins (adjust if your hardware differs) ---
-static const uint8_t PIN_CHARGE = 5;    // charge pin (pulse high, then hi-Z)
+static const uint8_t PIN_CHARGE = 3;    // charge pin (pulse high, then hi-Z)
 static const uint8_t PIN_DISCHARGE = 4; // discharge pin (active-high)
 static const uint8_t PIN_FEEDBACK = A2; // feedback pin (ADC)
 
-const float R1 = 2.2e3;  // charge resistor R1 (ohms)
-const float C1 = 470e-9; // storage capacitor C1 (farads)
-const float RD = 2.2e3;  // discharge resistor (ohms)
+const float R1 = 22e3;  // charge resistor R1 (ohms)
+const float C1 = 47e-9; // storage capacitor C1 (farads)
+const float RD = 22e3;  // discharge resistor (ohms)
 
 // Control loop
 static const unsigned int UPDATE_INTERVAL_MS = 10;
@@ -148,19 +148,21 @@ void setup()
 
 void loop()
 {
+  static bool dac_set = false; // DEBUG
   static unsigned long next_us = micros();
   static unsigned int loopCt = 0;
 
   // --- serial input (optional each frame) ---
-  (void)tryHandleCommand();
+  //bool updated = tryHandleCommand();
 
   // --- control step ---
-  const ServoDAC::Result r = dac.update(g_target_v);
-
-  if (loopCt == 0)
-  {
-    updateLCD(g_target_v, r);
-  }
+  //if (updated) {
+   // updated = false;
+    const ServoDAC::Result r = dac.update(g_target_v);
+      if (loopCt == 0) {
+      updateLCD(g_target_v, r);
+    }
+  //}
   loopCt = (loopCt + 1) % LCD_RATE_FRAMES;
 
   // --- wait until next frame boundary ---
