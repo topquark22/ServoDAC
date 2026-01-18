@@ -18,15 +18,24 @@ public:
     bool did_discharge;      // true if discharge pulse was applied
   };
 
-/*
- * chargePin       Data output pin to charging resistor R1
- * dischargePin    Data output pin to Q1 MOSFET base (via protection resistor)
- * feedbackPin     Analog input pin to C1 node
- * r1              Charging resistor (ohms)
- * c1              Integrating capacitor (farads)
- * rd              Discharge resistor (ohms)
- */
-  ServoDAC(uint8_t chargePin, uint8_t dischargePin, uint8_t feedbackPin, float r1, float c1, float rd);
+  /**
+   * chargePin       Data output pin to charging resistor R1
+   * dischargePin    Data output pin to discharge device (e.g. MOSFET gate/base)
+   * feedbackPin     Analog input pin sampling the C1 node
+   * r1              Charging resistor (ohms)
+   * c1              Integrating capacitor (farads)
+   * rd              Discharge resistor (ohms)
+   */
+  ServoDAC(uint8_t chargePin, uint8_t dischargePin, uint8_t feedbackPin,
+           float r1, float c1, float rd);
+
+  // --- Tuning (defaults match historical hardcoded values) ---
+  // These setters are intended to be called before begin(). By default they are
+  // ignored once begin() has been called (safe for control stability).
+  ServoDAC& setDeadband(float v);
+  ServoDAC& setEpsilon(float v);
+  ServoDAC& setMaxChargePulseUs(unsigned long us);
+  ServoDAC& setMaxDischargePulseUs(unsigned long us);
 
   // Configure pins and set safe initial states.
   void begin();
@@ -48,6 +57,15 @@ private:
   float   c1_;
   float   rd_;
 
+  // --- runtime state ---
+  bool started_ = false;
+
+  // --- configurable tuning parameters ---
+  float deadband_v_ = 0.05f;                 // volts
+  float eps_v_ = 0.001f;                     // volts
+  unsigned long max_charge_pulse_us_ = 10000UL;
+  unsigned long max_discharge_pulse_us_ = 10000UL;
+
   // Pin-driving primitives.
   void chargePulse(unsigned long pulse_us);
   void dischargePulse(unsigned long pulse_us);
@@ -57,13 +75,7 @@ private:
   unsigned int calcDischargePulse(float target_v, float sample_v);
 
 private:
-  // --- constants specific to the servo-DAC control ---
-  static constexpr float EPS_V = 0.001f;     // 1 mV
-  static constexpr float EPS_RATIO = 1e-6f;  // dimensionless
+  // --- constants ---
+  static constexpr float EPS_RATIO = 1e-6f;  // dimensionless (log guard)
   static constexpr float V_IN = 5.0f;        // pulse voltage / ADC reference
-
-  static constexpr float DEADBAND_V = 0.02f; // volts
-
-  static constexpr unsigned long MAX_CHARGE_PULSE_US = 12000UL;
-  static constexpr unsigned long MAX_DISCHARGE_PULSE_US = 12000UL;
 };

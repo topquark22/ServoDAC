@@ -134,6 +134,11 @@ void setup()
   // Make parseFloat snappier (default is 1000 ms)
   Serial.setTimeout(50);
 
+  dac.setDeadband(0.05f);
+  dac.setEpsilon(0.001f);
+  dac.setMaxChargePulseUs(10000UL);
+  dac.setMaxDischargePulseUs(10000UL);
+
   dac.begin();
 
   lcd.init();
@@ -153,16 +158,13 @@ void loop()
   static unsigned int loopCt = 0;
 
   // --- serial input (optional each frame) ---
-  //bool updated = tryHandleCommand();
+  bool updated = tryHandleCommand();
 
   // --- control step ---
-  //if (updated) {
-   // updated = false;
-    const ServoDAC::Result r = dac.update(g_target_v);
-      if (loopCt == 0) {
-      updateLCD(g_target_v, r);
-    }
-  //}
+  const ServoDAC::Result r = dac.update(g_target_v);
+    if (loopCt == 0) {
+    updateLCD(g_target_v, r);
+  }
   loopCt = (loopCt + 1) % LCD_RATE_FRAMES;
 
   // --- wait until next frame boundary ---
