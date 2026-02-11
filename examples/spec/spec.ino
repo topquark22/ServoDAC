@@ -21,9 +21,9 @@ static const uint8_t PIN_CHARGE = 3;    // charge pin (pulse high, then hi-Z)
 static const uint8_t PIN_DISCHARGE = 4; // discharge pin (active-high)
 static const uint8_t PIN_FEEDBACK = A2; // feedback pin (ADC)
 
-const float R1 = 22e3;  // charge resistor R1 (ohms)
-const float C1 = 47e-9; // storage capacitor C1 (farads)
-const float RD = 22e3;  // discharge resistor (ohms)
+const float R1 = 2.2e3;  // charge resistor R1 (ohms)
+const float C1 = 470e-9; // storage capacitor C1 (farads)
+const float RD = 2.2e3;  // discharge resistor (ohms)
 
 // Control loop
 static const unsigned int UPDATE_INTERVAL_MS = 10;

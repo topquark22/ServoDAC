@@ -57,6 +57,11 @@ void setup()
   // target input pin
   pinMode(PIN_TEST_IN, INPUT);
 
+  dac.setDeadband(0.05f);
+  dac.setEpsilon(0.001f);
+  dac.setMaxChargePulseUs(10000UL);
+  dac.setMaxDischargePulseUs(10000UL);
+  
   // servo-dac pins
   dac.begin();
 
