@@ -57,7 +57,8 @@ This makes the DAC **self-correcting**, insensitive to leakage, and largely inde
 ## Example: Input Follower
 
 Software requirements:
-- LiquidCrystal_I2C version 2.0.0 or above.
+- LiquidCrystal_I2C version 2.0.0 or above
+- [GPIOUtils](https://github.com/topquark22/GPIOUtils)
 
 Refer to [examples/input_follower](examples/input_follower/input_follower.ino).
 
