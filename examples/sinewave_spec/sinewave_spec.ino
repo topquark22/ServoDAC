@@ -56,30 +56,8 @@ void setup() {
   dac.begin();
 }
 
-static void updateLCD(float target, const ServoDAC::Result &r)
-{
-  // Row 0: target and measured
-  lcd.setCursor(0, 0);
-  lcd.print(target, 3);
-  lcd.print(F("V "));
-
-  lcd.setCursor(8, 0);
-  lcd.print(r.sample_v, 3);
-  lcd.print(F("V "));
-
-  // Row 1: pulse width and error
-  lcd.setCursor(0, 1);
-  lcd.print(r.pulse_us);
-  lcd.print(F("us   "));
-
-  lcd.setCursor(8, 1);
-  lcd.print(r.error_v, 3);
-  lcd.print(F("V "));
-}
-
 void loop() {
   static unsigned long next_us = micros();
-  static unsigned int loopCt = 0;
 
   static float f = 0.0f;
 
@@ -96,10 +74,6 @@ void loop() {
 
   // --- control step ---
   const ServoDAC::Result r = dac.update(g_target_v);
-  if (loopCt == 0) {
-    updateLCD(g_target_v, r);
-  }
-  loopCt = (loopCt + 1) % LCD_RATE_FRAMES;
 
   // --- wait until next frame boundary ---
   next_us += (unsigned long)UPDATE_INTERVAL_MS * 1000UL;
