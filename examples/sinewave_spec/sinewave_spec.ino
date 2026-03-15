@@ -7,9 +7,6 @@ const uint8_t PIN_CHARGE = 3;     // charge pin (pulse high, then hi-Z)
 const uint8_t PIN_DISCHARGE = 4;  // discharge pin (active-high)
 const uint8_t PIN_FEEDBACK = A2;  // feedback pin
 
-// R1 = 22K
-// C1 = 47nf
-// Rd = 22k
 const float R1 = 2.2e3;  // Charging resistor (ohms)
 const float C1 = 470e-9; // Integrating capacitor (farads)
 const float R_D = 2.2e3;  // discharge resistor (ohms)
@@ -57,13 +54,22 @@ void loop() {
     Serial.println(f);
   }
 
-  float t = (millis() - start_ms) * 1.0e-3f; // seconds
-  float y = sin(2 * PI * f * t);
-  float g_target_v = (y + 1) * (Vout / 2);
+  if (f > 0.0f) {
+    const unsigned long elapsed_ms = millis() - start_ms;
+
+    // Keep the floating-point value small by wrapping time to one cycle.
+    const float period_ms = 1000.0f / f;
+    const float cycle_ms = fmodf((float)elapsed_ms, period_ms);
+
+    const float phase = 2.0f * PI * (cycle_ms / period_ms);
+    y = sinf(phase);
+  }
+
+  const float g_target_v = (y + 1.0f) * (Vout * 0.5f);
 
   // --- control step ---
   const ServoDAC::Result r = dac.update(g_target_v);
-
+  
   // --- wait until next frame boundary ---
   next_us += (unsigned long)UPDATE_INTERVAL_MS * 1000UL;
   while ((long)(micros() - next_us) < 0)
