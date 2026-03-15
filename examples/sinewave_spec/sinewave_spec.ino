@@ -1,5 +1,7 @@
 #include <math.h>
 
+#include <LiquidCrystal_I2C.h>
+
 #include "ServoDAC.h"
 
 // --- wiring pins (matching the original sketch defaults) ---
@@ -14,6 +16,12 @@ const float R_D = 2.2e3;  // discharge resistor (ohms)
 const float Vin = 5.0;
 const float Vout = 5.0;
 
+// LCD I2C address and size
+const uint8_t LCD_ADDR = 0x27;
+const uint8_t LCD_WIDTH = 16;
+const uint8_t LCD_HEIGHT = 2;
+LiquidCrystal_I2C lcd(LCD_ADDR, LCD_WIDTH, LCD_HEIGHT);
+
 // Control loop
 static const unsigned long UPDATE_INTERVAL_MS = 2;
 
@@ -27,6 +35,9 @@ unsigned long start_ms;
 
 void setup() {
   Serial.begin(115200);
+  lcd.init();
+  lcd.backlight();
+  lcd.clear();
 
   start_ms = millis();
 
@@ -42,6 +53,12 @@ void setup() {
   dac.begin();
 }
 
+void updateLCD(float freq) {
+  lcd.clear();
+  lcd.print(F("f="));
+  lcd.print(freq);
+}
+
 void loop() {
   static unsigned long next_us = micros();
 
@@ -52,8 +69,11 @@ void loop() {
     while (Serial.available()) { Serial.read(); }
     Serial.print(F("frequency = "));
     Serial.println(f);
+    updateLCD(f);
   }
 
+  float y = 0.0f;
+  
   if (f > 0.0f) {
     const unsigned long elapsed_ms = millis() - start_ms;
 
