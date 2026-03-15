@@ -16,16 +16,16 @@ ServoDAC is intended for **slow, precise analog control signals**, not high-freq
 ### Components
 
 - **M1**: Arduino (Nano V3, Uno)
-- **I1**: LMC6482 (dual rail-to-rail op-amp, ultra-low input bias) [1]
+- **I1**: LMC6482 (dual rail-to-rail op-amp, ultra-low input bias) [^1]
 - **Q1**: 2N7000 N-MOSFET
 - **R1**: 2.2kΩ (charge resistor)
 - **C1**: 470nF film (Mylar or PP)  
-- **R_D**: 2.2kΩ (discharge resistor)
+- **R~D~**: 2.2kΩ (discharge resistor)
 - **R2**: 10kΩ (post-filter)
 - **C2**: 100nF (post-filter)
 - **L1**: LCD1602 with I²C backpack, optional but used in some examples
 
-[1] If not using an ultra-low input bias op-amp, to account for any leakage current, call dac.update(v) periodically to send a compensating dose of charge to the capacitor.
+[^1] If not using an ultra-low input bias op-amp, to account for any leakage current, call dac.update(v) periodically to send a compensating dose of charge to the capacitor.
 
 ### Key Connections
 
