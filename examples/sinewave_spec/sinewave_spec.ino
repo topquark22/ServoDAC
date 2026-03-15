@@ -1,7 +1,5 @@
 #include <math.h>
 
-#include <LiquidCrystal_I2C.h>
-
 #include "ServoDAC.h"
 
 // --- wiring pins (matching the original sketch defaults) ---
@@ -26,22 +24,13 @@ static const unsigned long UPDATE_INTERVAL_MS = 2;
 static const unsigned long LCD_RATE_MS = 250;
 static const unsigned long LCD_RATE_FRAMES = LCD_RATE_MS / UPDATE_INTERVAL_MS;
 
-// LCD I2C address and size
-const uint8_t LCD_ADDR = 0x27;
-const uint8_t LCD_WIDTH = 16;
-const uint8_t LCD_HEIGHT = 2;
-
-LiquidCrystal_I2C lcd(LCD_ADDR, LCD_WIDTH, LCD_HEIGHT);
-
 ServoDAC dac(PIN_CHARGE, PIN_DISCHARGE, PIN_FEEDBACK, R1, C1, R_D);
 
 unsigned long start_ms;
 
 void setup() {
   Serial.begin(115200);
-  lcd.init();
-  lcd.backlight();
-  lcd.clear();
+
   start_ms = millis();
 
   // Explicitly apply ServoDAC default tuning values (overrideable).
