@@ -32,7 +32,7 @@ The result is a stable, low-noise analog voltage with predictable dynamics and n
 - **A2** → C1 node (feedback)
 - **A3** → target input (optional, but used in some examples)
 - **A4 / A5** → LCD1602 (I²C)
-- 
+
 ---
 
 ## Concept Overview
