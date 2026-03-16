@@ -31,7 +31,7 @@ static const unsigned long LCD_RATE_FRAMES = LCD_RATE_MS / UPDATE_INTERVAL_MS;
 
 ServoDAC dac(PIN_CHARGE, PIN_DISCHARGE, PIN_FEEDBACK, R1, C1, R_D);
 
-unsigned long start_ms;
+unsigned long start_us;
 
 void setup() {
   Serial.begin(115200);
@@ -39,7 +39,7 @@ void setup() {
   lcd.backlight();
   lcd.clear();
 
-  start_ms = millis();
+  start_us = micros();
 
   // Explicitly apply ServoDAC default tuning values (overrideable).
   // These correspond to the historical hardcoded defaults.
@@ -75,13 +75,11 @@ void loop() {
   float y = 0.0f;
   
   if (f > 0.0f) {
-    const unsigned long elapsed_ms = millis() - start_ms;
-
-    // Keep the floating-point value small by wrapping time to one cycle.
-    const float period_ms = 1000.0f / f;
-    const float cycle_ms = fmodf((float)elapsed_ms, period_ms);
-
-    const float phase = 2.0f * PI * (cycle_ms / period_ms);
+    unsigned long elapsed_us = micros() - start_us;
+    unsigned long period_us = (unsigned long)(1000000.0f / f);
+    unsigned long cycle_us = elapsed_us % period_us;
+    float frac = (float)cycle_us / (float)period_us;
+    float phase = 2.0f * PI * frac;
     y = sinf(phase);
   }
 
