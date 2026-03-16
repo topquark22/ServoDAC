@@ -185,12 +185,6 @@ The frequency is read from the serial monitor.
 
 ---
 
-## [sinewave](examples/sinewave)
-
-Like sinewave_spec, except the input is read from a voltage divider on pin A3.
-
----
-
 ### Notes
 
 - All examples assume the same basic RC DAC hardware and pin assignments.
