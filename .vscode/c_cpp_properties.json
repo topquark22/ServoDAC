@@ -29,8 +29,8 @@
                 "path": [
                     "${workspaceFolder}",
                     "${env:ARDUINO_LIB}",
-                    "${env:ARDUINO15}/packages/arduino/hardware/avr/1.8.6/cores/arduino",
-                    "${env:ARDUINO15}/packages/arduino/hardware/avr/1.8.6/libraries/Wire/src"
+                    "${env:ARDUINO15}/packages/arduino/hardware/avr/*/cores/arduino",
+                    "${env:ARDUINO15}/packages/arduino/hardware/avr/*/libraries/Wire/src"
                 ],
                 "limitSymbolsToIncludedHeaders": true
             }
