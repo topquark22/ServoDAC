@@ -2,16 +2,6 @@
 
 #include <math.h>  // logf, fabsf
 
-ServoDAC::ServoDAC(uint8_t chargePin, uint8_t dischargePin, uint8_t feedbackPin,
-                   float r1, float c1, float rd)
-    : charge_pin_(chargePin),
-      discharge_pin_(dischargePin),
-      feedback_pin_(feedbackPin),
-      r1_(r1),
-      c1_(c1),
-      rd_(rd) {
-}
-
 // --- Tuning setters (intended to be called before begin()) ---
 ServoDAC& ServoDAC::setDeadband(float v) {
   if (!started_) {
