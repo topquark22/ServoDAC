@@ -153,7 +153,6 @@ void setup()
 
 void loop()
 {
-  static bool dac_set = false; // DEBUG
   static unsigned long next_us = micros();
   static unsigned int loopCt = 0;
 
