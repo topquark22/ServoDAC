@@ -36,14 +36,9 @@ public:
         rd_(rd) {}
 
   // Overloaded constructor: rd defaults to r1
-  ServoDAC(uint8_t chargePin, uint8_t dischargePin, uint8_t feedbackPin,
-           float r1, float c1)
-      : charge_pin_(chargePin),
-        discharge_pin_(dischargePin),
-        feedback_pin_(feedbackPin),
-        r1_(r1),
-        c1_(c1),
-        rd_(r1) {}
+ ServoDAC(uint8_t chargePin, uint8_t dischargePin, uint8_t feedbackPin,
+         float r1, float c1)
+    : ServoDAC(chargePin, dischargePin, feedbackPin, r1, c1, r1) {}
   
   // --- Tuning (defaults match historical hardcoded values) ---
   // These setters are intended to be called before begin(). By default they are
