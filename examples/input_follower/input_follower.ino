@@ -1,4 +1,5 @@
 #include <LiquidCrystal_I2C.h>
+#include <GPIOUtils.h>
 
 #include "ServoDAC.h"
 
@@ -23,6 +24,9 @@ const uint8_t LCD_ADDR = 0x27;
 const uint8_t LCD_WIDTH = 16;
 const uint8_t LCD_HEIGHT = 2;
 LiquidCrystal_I2C lcd(LCD_ADDR, LCD_WIDTH, LCD_HEIGHT);
+
+// for cleaning up analog input (from GPIOUtils)
+Dejitter pin(PIN_TEST_IN, 2);
 
 // ServoDAC instance (chargePin, dischargePin, feedbackPin)
 ServoDAC dac(PIN_CHARGE, PIN_DISCHARGE, PIN_FEEDBACK, R1, C1, RD);
@@ -54,9 +58,6 @@ unsigned int loopCt = 0;
 
 void setup()
 {
-  // target input pin
-  pinMode(PIN_TEST_IN, INPUT);
-
   dac.setDeadband(0.05f);
   dac.setEpsilon(0.001f);
   dac.setMaxChargePulseUs(10000UL);
@@ -78,7 +79,7 @@ void loop()
     next_us = micros();
 
   // --- target sample ---
-  const int target_raw = analogRead(PIN_TEST_IN);
+  const int target_raw = pin.read();
   const float target_v = ServoDAC::adcToVoltage(target_raw);
 
   // --- control step ---
