@@ -66,7 +66,7 @@ Here, the sketch is responsible for the analog input pin, the LCD, and invoking 
 
 The ServoDAC library handles the charge, discharge, and feedback pins.
 
-Pin assignments can be changed. The feedback pin must be an analog input pin.
+Pin assignments can be changed in the constructor parameters. The feedback pin must be an analog input pin.
 
 ### Core Elements
 
