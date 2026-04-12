@@ -164,7 +164,7 @@ Reads an input voltage (e.g. from a potentiometer) and drives the ServoDAC outpu
 **Key features:**
 - Continuous analog tracking
 - LCD readout of target, measured voltage, pulse width, and error
-- Good starting point for understanding ServoDAC behavior
+- Good starting point for understanding ServoDAC behaviour
 
 ---
 
@@ -174,7 +174,7 @@ Reads an input voltage (e.g. from a potentiometer) and drives the ServoDAC outpu
 Demonstrates dynamic waveform generation.
 
 **Description:**  
-Generates a sine wave in software and servos the DAC output to that waveform. Useful for evaluating dynamic response, settling behavior, and loop stability.
+Generates a sine wave in software and servos the DAC output to that waveform. Useful for evaluating dynamic response, settling behaviour, and loop stability.
 
 The frequency is read from the serial monitor.
 
