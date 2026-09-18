@@ -51,23 +51,26 @@ T(60,423,"LCD1602, I²C",size=13); note(60,439,"optional; power not shown")
 
 # charge path
 L((400,300),(450,300)); rh(450,300); L((510,300),(815,300))
-T(464,282,"R1","end",weight="bold"); T(472,282,"2.2 kΩ"); note(480,326,"charge","middle")
+T(464,282,"R1","end",weight="bold"); T(472,282,"2.2 kΩ"); note(480,326,"charge: pulse HIGH, then hi-Z","middle")
 # feedback
 dot(570,300); L((570,300),(570,240),(400,240)); note(485,232,"feedback","middle")
 # discharge
-L((400,420),(440,420)); rh(440,420); L((500,420),(606,420))
-T(458,402,"RG","end",weight="bold"); T(466,402,"1 kΩ"); note(470,446,"discharge","middle")
-dot(630,300); L((630,300),(630,315)); rv(630,315); L((630,375),(630,404),(614,404))
-T(612,345,"RD","end",weight="bold")
-T(612,362,"2.2 kΩ","end",size=13)
-# Q1
-L((606,404),(606,436),w=2.4)
-for a,b in((397,411),(414,426),(429,443)): L((614,a),(614,b),w=2.4)
-L((614,436),(630,436),(630,GY)); L((614,420),(630,420),(630,436))
-o.append('<polygon points="615,420 624,415.5 624,424.5" fill="#111"/>')
-gnd(630,GY)
-T(644,416,"Q1",weight="bold"); T(644,433,"2N7000",size=13)
-pin(600,414,"G","end"); pin(636,398,"D"); pin(636,456,"S")
+L((400,420),(440,420)); rh(440,420); L((500,420),(592,420))
+T(470,402,"1 kΩ","middle"); note(470,446,"gate current limit","middle")
+dot(636,300); L((636,300),(636,315)); rv(636,315); L((636,375),(636,396))
+T(618,345,"RD","end",weight="bold")
+T(618,362,"2.2 kΩ","end",size=13); note(618,381,"discharge","end")
+# Q1 -- N-channel MOSFET, enlarged
+L((592,388),(592,452),w=3)                               # gate bar
+for a,b in ((388,404),(412,428),(436,452)):              # channel segments
+    L((604,a),(604,b),w=3)
+L((604,396),(636,396))                                   # drain to RD
+L((604,444),(636,444),(636,GY))                          # source down to ground
+L((604,420),(630,420),(630,444)); dot(636,444)           # body tie to source
+o.append('<polygon points="605,420 617,414.5 617,425.5" fill="#111"/>')
+gnd(636,GY)
+T(652,404,"Q1",weight="bold"); T(652,424,"2N7000",size=13)
+pin(586,412,"G","end"); pin(642,382,"D"); pin(642,466,"S")
 # C1
 dot(730,300); L((730,300),(730,450)); cap(730,450); L((730,460),(730,GY)); gnd(730,GY)
 T(756,452,"C1",weight="bold"); T(756,469,"470 nF film",size=13)
@@ -95,12 +98,15 @@ T(1006,617,"C3",weight="bold"); T(1006,634,"100 nF",size=13)
 T(px-42,612,"LMC6482","end"); note(px-42,628,"supply, decoupled at the IC","end")
 
 # notes
-T(60,590,"Notes",weight="bold",size=13)
-for i,s in enumerate(["Charge, discharge and feedback pins are constructor parameters;",
+T(60,568,"Notes",weight="bold",size=13)
+for i,s in enumerate(["D3 pulses HIGH to charge, then returns to high impedance, so R1 is",
+                      "out of circuit while C1 holds or discharges. Pulse widths follow",
+                      "t = −R1·C1·ln((5−Vt)/(5−Vs)) and t = −RD·C1·ln(Vt/Vs).",
+                      "Charge, discharge and feedback pins are constructor parameters;",
                       "the feedback pin must be an analog input.",
                       "Input (A3) and L1 (A4/A5) are used only by the example sketches.",
                       "I1 pin numbers are for the 8-pin DIP/SOIC package."]):
-    T(60,612+i*18,s,size=12,fill="#333")
+    T(60,590+i*18,s,size=12,fill="#333")
 
 svg=('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" '
      'font-family="\'DejaVu Sans\', Helvetica, Arial, sans-serif">\n<rect width="1280" height="720" fill="#fff"/>\n'
